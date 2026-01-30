@@ -93,48 +93,7 @@ export default function User(){
         </div>
 
         {/* Booked Movies Section */}
-        {bookedMovies.length > 0 && (
-          <div className="profile-bookings">
-            <h3 style={{marginBottom: 20, color: '#fff', fontSize: '1.2rem'}}>📋 Your Bookings</h3>
-            <div className="bookings-grid">
-              {bookedMovies.map((booking, index) => (
-                <div key={booking.id} className="booking-card slide-in" style={{ animationDelay: `${index * 0.05}s` }}>
-                  <div className="booking-header">
-                    <div className="booking-status">✓ Confirmed</div>
-                    <div className="booking-id">#{booking.id.toString().slice(-6)}</div>
-                  </div>
-                  
-                  <div className="booking-details">
-                    <div className="booking-item">
-                      <span className="booking-label">🎬</span>
-                      <span className="booking-value">{booking.movie}</span>
-                    </div>
-                    
-                    <div className="booking-item">
-                      <span className="booking-label">🕐</span>
-                      <span className="booking-value">{booking.showtime}</span>
-                    </div>
-                    
-                    <div className="booking-item">
-                      <span className="booking-label">🎫</span>
-                      <span className="booking-value">{booking.seats} seat{booking.seats > 1 ? 's' : ''}</span>
-                    </div>
-                    
-                    <div className="booking-item">
-                      <span className="booking-label">💰</span>
-                      <span className="booking-price">₹{booking.totalPrice}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="booking-footer">
-                    <small>{booking.bookedAt}</small>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <hr style={{borderColor: 'rgba(255,255,255,0.1)', margin: '30px 0'}} />
-          </div>
-        )}
+        
 
         {/* Actions */}
         <div className="profile-actions">
