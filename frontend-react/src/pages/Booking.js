@@ -9,14 +9,25 @@ export default function Booking() {
 
   // Load booked movies from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('bookedMovies');
-    if (stored) {
-      try {
-        setBookedMovies(JSON.parse(stored));
-      } catch (e) {
-        console.error('Error loading booked movies:', e);
+    const loadBookings = () => {
+      const stored = localStorage.getItem('bookedMovies');
+      if (stored) {
+        try {
+          setBookedMovies(JSON.parse(stored));
+        } catch (e) {
+          console.error('Error loading booked movies:', e);
+        }
       }
-    }
+    };
+
+    loadBookings();
+
+    // Listen for booking updates from Payment page
+    window.addEventListener('bookingUpdated', loadBookings);
+    
+    return () => {
+      window.removeEventListener('bookingUpdated', loadBookings);
+    };
   }, []);
 
   const movies = [
@@ -439,22 +450,7 @@ export default function Booking() {
         movie: movie.title,
         movieId: movie.id,
         price: movie.price,
-        showtime,
-        seats: 1,
-        onBookingComplete: (bookingData) => {
-          const newBooking = {
-            id: Date.now(),
-            movie: movie.title,
-            movieId: movie.id,
-            showtime: showtime,
-            seats: bookingData.seats,
-            totalPrice: bookingData.totalPrice,
-            bookedAt: new Date().toLocaleString()
-          };
-          const updated = [...bookedMovies, newBooking];
-          setBookedMovies(updated);
-          localStorage.setItem('bookedMovies', JSON.stringify(updated));
-        }
+        showtime
       } 
     });
   }

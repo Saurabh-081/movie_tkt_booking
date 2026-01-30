@@ -5,18 +5,38 @@ import { isAuthenticated, logout, getUserEmail } from '../utils/auth';
 export default function User(){
   const [userEmail, setUserEmail] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [bookedMovies, setBookedMovies] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
     setUserEmail(getUserEmail());
     
+    const loadBookings = () => {
+      const stored = localStorage.getItem('bookedMovies');
+      if (stored) {
+        try {
+          setBookedMovies(JSON.parse(stored));
+        } catch (e) {
+          console.error('Error loading booked movies:', e);
+        }
+      }
+    };
+
+    loadBookings();
+    
     const updateAuth = () => {
       setUserEmail(getUserEmail());
       setIsLoggedIn(isAuthenticated());
     };
+    
     window.addEventListener('authChanged', updateAuth);
-    return () => window.removeEventListener('authChanged', updateAuth);
+    window.addEventListener('bookingUpdated', loadBookings);
+    
+    return () => {
+      window.removeEventListener('authChanged', updateAuth);
+      window.removeEventListener('bookingUpdated', loadBookings);
+    };
   }, []);
 
   function handleLogout(){
@@ -57,7 +77,7 @@ export default function User(){
         <div className="profile-stats">
           <div className="stat-card slide-in">
             <div className="stat-icon">🎫</div>
-            <div className="stat-value">8</div>
+            <div className="stat-value">{bookedMovies.length}</div>
             <div className="stat-label">Total Bookings</div>
           </div>
           <div className="stat-card slide-in" style={{ animationDelay: '0.1s' }}>
@@ -67,10 +87,54 @@ export default function User(){
           </div>
           <div className="stat-card slide-in" style={{ animationDelay: '0.2s' }}>
             <div className="stat-icon">💰</div>
-            <div className="stat-value">₹4200</div>
+            <div className="stat-value">₹{bookedMovies.reduce((sum, b) => sum + b.totalPrice, 0)}</div>
             <div className="stat-label">Total Spent</div>
           </div>
         </div>
+
+        {/* Booked Movies Section */}
+        {bookedMovies.length > 0 && (
+          <div className="profile-bookings">
+            <h3 style={{marginBottom: 20, color: '#fff', fontSize: '1.2rem'}}>📋 Your Bookings</h3>
+            <div className="bookings-grid">
+              {bookedMovies.map((booking, index) => (
+                <div key={booking.id} className="booking-card slide-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                  <div className="booking-header">
+                    <div className="booking-status">✓ Confirmed</div>
+                    <div className="booking-id">#{booking.id.toString().slice(-6)}</div>
+                  </div>
+                  
+                  <div className="booking-details">
+                    <div className="booking-item">
+                      <span className="booking-label">🎬</span>
+                      <span className="booking-value">{booking.movie}</span>
+                    </div>
+                    
+                    <div className="booking-item">
+                      <span className="booking-label">🕐</span>
+                      <span className="booking-value">{booking.showtime}</span>
+                    </div>
+                    
+                    <div className="booking-item">
+                      <span className="booking-label">🎫</span>
+                      <span className="booking-value">{booking.seats} seat{booking.seats > 1 ? 's' : ''}</span>
+                    </div>
+                    
+                    <div className="booking-item">
+                      <span className="booking-label">💰</span>
+                      <span className="booking-price">₹{booking.totalPrice}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="booking-footer">
+                    <small>{booking.bookedAt}</small>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <hr style={{borderColor: 'rgba(255,255,255,0.1)', margin: '30px 0'}} />
+          </div>
+        )}
 
         {/* Actions */}
         <div className="profile-actions">

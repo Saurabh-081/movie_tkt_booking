@@ -5,9 +5,9 @@ export default function Payment() {
   const location = useLocation();
   const navigate = useNavigate();
   const movie = location.state?.movie ?? 'Selected movie';
+  const movieId = location.state?.movieId ?? null;
   const showtime = location.state?.showtime ?? '2:00 PM';
   const price = location.state?.price ?? 250;
-  const onBookingComplete = location.state?.onBookingComplete;
   const [method, setMethod] = useState('UPI');
   const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -27,18 +27,35 @@ export default function Payment() {
       return;
     }
     
-    // Save booking data
-    if (onBookingComplete) {
-      onBookingComplete({
+    // Save booking data to localStorage
+    try {
+      const stored = localStorage.getItem('bookedMovies');
+      const bookedMovies = stored ? JSON.parse(stored) : [];
+      
+      const newBooking = {
+        id: Date.now(),
+        movie: movie,
+        movieId: movieId,
+        showtime: showtime,
         seats: selectedSeats.length,
         seatIds: selectedSeats.join(', '),
         totalPrice: totalPrice,
-        method: method
-      });
+        method: method,
+        bookedAt: new Date().toLocaleString()
+      };
+      
+      bookedMovies.push(newBooking);
+      localStorage.setItem('bookedMovies', JSON.stringify(bookedMovies));
+      
+      // Trigger event so Booking page updates
+      window.dispatchEvent(new Event('bookingUpdated'));
+      
+      alert(`✓ Payment of ₹${totalPrice} (${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''} - ${selectedSeats.join(', ')}) via ${method} completed!\n\nBooking Confirmed for ${movie} at ${showtime}`);
+      navigate('/booking');
+    } catch (error) {
+      console.error('Error saving booking:', error);
+      alert('Error saving booking. Please try again.');
     }
-    
-    alert(`✓ Payment of ₹${totalPrice} (${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''} - ${selectedSeats.join(', ')}) via ${method} completed!\n\nBooking Confirmed for ${movie} at ${showtime}`);
-    navigate('/booking');
   }
 
   return (
