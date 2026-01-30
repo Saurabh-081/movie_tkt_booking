@@ -16,33 +16,88 @@ export default function ResetPassword(){
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); setMsg('');
+    setError(''); 
+    setMsg('');
     if (!token) return setError('Reset token required');
     if (password.length < 6) return setError('Password must be at least 6 characters');
     if (password !== confirm) return setError('Passwords do not match');
     try{
       await resetPasswordRequest(token, password);
-      setMsg('Password reset successful — please login');
-      setTimeout(() => navigate('/'), 1500);
+      setMsg('✓ Password reset successful — redirecting to login...');
+      setTimeout(() => navigate('/login'), 1500);
     }catch(err){
       setError(err.response?.data?.msg || 'Failed to reset password');
     }
   };
 
   return (
-    <div className="card auth">
-      <h2>Reset Password</h2>
-      {error && <div style={{color:'#ff8f6b',marginBottom:8,fontSize:14}}>{error}</div>}
-      {msg && <div style={{color:'#6bbf6b',marginBottom:8,fontSize:14}}>{msg}</div>}
-      <form onSubmit={handleSubmit}>
-        <input className="input" placeholder="Reset Token" value={token} onChange={e => setToken(e.target.value)} />
-        <input className="input" placeholder="New password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-        <input className="input" placeholder="Confirm password" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} />
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:12}}>
-          <button className="btn primary" type="submit">Reset password</button>
-          <button className="btn ghost" type="button" onClick={() => { setPassword(''); setConfirm(''); setToken(tokenFromQuery || ''); setMsg(''); setError(''); }}>Clear</button>
+    <div className="login-container fade-in">
+      <div className="login-card">
+        <div className="login-header">
+          <div className="login-icon">🔑</div>
+          <h1>Reset Password</h1>
+          <p>Create a new secure password</p>
         </div>
-      </form>
+
+        {error && (
+          <div className="alert alert-error shake">
+            <span>⚠️</span> {error}
+          </div>
+        )}
+
+        {msg && (
+          <div className="alert alert-success slide-in">
+            <span>✓</span> {msg}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Reset Token</label>
+            <input 
+              className="form-input" 
+              placeholder="Enter your reset token" 
+              value={token} 
+              onChange={e => setToken(e.target.value)}
+              type="text"
+            />
+            <p className="form-hint">Token from your email reset link</p>
+          </div>
+
+          <div className="form-group">
+            <label>New Password</label>
+            <input 
+              className="form-input" 
+              placeholder="Create a new password" 
+              type="password" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input 
+              className="form-input" 
+              placeholder="Confirm your password" 
+              type="password" 
+              value={confirm} 
+              onChange={e => setConfirm(e.target.value)}
+            />
+          </div>
+
+          <button className="btn-submit" type="submit">
+            Reset Password
+          </button>
+        </form>
+
+        <button 
+          className="btn-back"
+          onClick={() => navigate('/login')}
+        >
+          ← Back to Login
+        </button>
+      </div>
     </div>
   );
 }

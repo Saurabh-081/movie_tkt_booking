@@ -54,38 +54,104 @@ export default function Login() {
   }
 
   return (
-    <div className="card auth">
-      <h2 style={{marginTop:0}}>{isRegistering ? 'Create Account' : 'Login'}</h2>
-      {error && <div style={{color:'#ff8f6b',marginBottom:8,fontSize:14}}>{error}</div>}
-      <input className="input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <input className="input" placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-      {isRegistering && (
-        <input className="input" placeholder="Confirm Password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
-      )}
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:12}}>
-        <button className="btn primary" onClick={isRegistering ? handleRegister : handleLogin}>{isRegistering ? 'Register' : 'Login'}</button>
-        <button className="btn ghost" onClick={() => {setEmail(''); setPassword(''); setConfirmPassword(''); setError('');}}>Clear</button>
-      </div>
-      <div style={{marginTop:12,textAlign:'center',fontSize:14}}>
-        {isRegistering ? 'Already have an account? ' : 'Don\'t have an account? '}
-        <button 
-          className="btn ghost" 
-          onClick={() => setIsRegistering(!isRegistering)}
-          style={{background:'transparent',border:'none',color:'#ff6b6b',cursor:'pointer',textDecoration:'underline',padding:0}}
-        >
-          {isRegistering ? 'Login' : 'Register'}
-        </button>
-      </div>
-      {!isRegistering && (
-        <div style={{marginTop:8,textAlign:'center'}}>
-          <button className="btn ghost" onClick={() => window.location.href='/forgot'} style={{background:'transparent',border:'none',color:'#0077cc',cursor:'pointer',padding:0,textDecoration:'underline'}}>Forgot password?</button>
+    <div className="login-container fade-in">
+      <div className="login-card">
+        <div className="login-header">
+          <div className="login-icon">🎬</div>
+          <h1>{isRegistering ? 'Create Account' : 'Welcome Back'}</h1>
+          <p>{isRegistering ? 'Join MovieFlix today' : 'Sign in to your account'}</p>
         </div>
-      )}
-      <div style={{marginTop:16,textAlign:'center'}}>
+
+        {error && (
+          <div className="alert alert-error shake">
+            <span>⚠️</span> {error}
+          </div>
+        )}
+
+        <div className="form-group">
+          <label>Email Address</label>
+          <input 
+            className="form-input" 
+            placeholder="Enter your email" 
+            value={email} 
+            onChange={e => setEmail(e.target.value)}
+            type="email"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Password</label>
+          <input 
+            className="form-input" 
+            placeholder="Enter your password" 
+            type="password" 
+            value={password} 
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+
+        {isRegistering && (
+          <div className="form-group slide-in">
+            <label>Confirm Password</label>
+            <input 
+              className="form-input" 
+              placeholder="Confirm your password" 
+              type="password" 
+              value={confirmPassword} 
+              onChange={e => setConfirmPassword(e.target.value)}
+            />
+          </div>
+        )}
+
         <button 
-          className="btn ghost" 
+          className="btn-submit"
+          onClick={isRegistering ? handleRegister : handleLogin}
+        >
+          {isRegistering ? 'Create Account' : 'Sign In'}
+        </button>
+
+        <div className="form-divider">
+          <span>OR</span>
+        </div>
+
+        <div className="form-footer">
+          {isRegistering ? (
+            <>
+              <p>Already have an account?</p>
+              <button 
+                className="btn-toggle"
+                onClick={() => setIsRegistering(false)}
+              >
+                Sign In
+              </button>
+            </>
+          ) : (
+            <>
+              <p>Don't have an account?</p>
+              <button 
+                className="btn-toggle"
+                onClick={() => setIsRegistering(true)}
+              >
+                Create One
+              </button>
+            </>
+          )}
+        </div>
+
+        {!isRegistering && (
+          <div className="form-footer">
+            <button 
+              className="btn-link"
+              onClick={() => navigate('/forgot')}
+            >
+              Forgot your password?
+            </button>
+          </div>
+        )}
+
+        <button 
+          className="btn-back"
           onClick={() => navigate('/')}
-          style={{background:'transparent',border:'none',color:'var(--muted)',cursor:'pointer',padding:0,textDecoration:'underline'}}
         >
           ← Back to Home
         </button>
