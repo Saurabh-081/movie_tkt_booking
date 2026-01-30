@@ -48,7 +48,6 @@ export default function Payment() {
       };
       
       bookedMovies.push(newBooking);
-      const storageKey = `bookedMovies_${userEmail}`;
       localStorage.setItem(storageKey, JSON.stringify(bookedMovies));
       
       // Trigger event so Booking page updates

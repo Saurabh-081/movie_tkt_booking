@@ -22,7 +22,12 @@ export default function NavBar() {
 
   return (
     <header className="header">
-      <div className="logo">MovieFlix</div>
+      <Link to="/" style={{textDecoration:'none',color:'inherit'}}>
+        <div className="logo-container">
+          <img src="/movieflix-logo.svg" alt="MovieFlix" className="logo-image" />
+          <span className="logo-text">MovieFlix</span>
+        </div>
+      </Link>
       <nav className="nav">
         <Link to="/">Home</Link>
         <Link to="/booking">Booking</Link>
