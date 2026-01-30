@@ -1,16 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { getUserEmail } from '../utils/auth';
 
 export default function Booking() {
   const navigate = useNavigate();
+  const userEmail = getUserEmail();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('All');
   const [bookedMovies, setBookedMovies] = useState([]);
 
-  // Load booked movies from localStorage
+  // Load booked movies from localStorage for current user
   useEffect(() => {
     const loadBookings = () => {
-      const stored = localStorage.getItem('bookedMovies');
+      const storageKey = `bookedMovies_${userEmail}`;
+      const stored = localStorage.getItem(storageKey);
       if (stored) {
         try {
           setBookedMovies(JSON.parse(stored));

@@ -1,9 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { getUserEmail } from '../utils/auth';
 
 export default function Payment() {
   const location = useLocation();
   const navigate = useNavigate();
+  const userEmail = getUserEmail();
   const movie = location.state?.movie ?? 'Selected movie';
   const movieId = location.state?.movieId ?? null;
   const showtime = location.state?.showtime ?? '2:00 PM';
@@ -27,9 +29,10 @@ export default function Payment() {
       return;
     }
     
-    // Save booking data to localStorage
+    // Save booking data to localStorage with user email
     try {
-      const stored = localStorage.getItem('bookedMovies');
+      const storageKey = `bookedMovies_${userEmail}`;
+      const stored = localStorage.getItem(storageKey);
       const bookedMovies = stored ? JSON.parse(stored) : [];
       
       const newBooking = {
@@ -45,7 +48,8 @@ export default function Payment() {
       };
       
       bookedMovies.push(newBooking);
-      localStorage.setItem('bookedMovies', JSON.stringify(bookedMovies));
+      const storageKey = `bookedMovies_${userEmail}`;
+      localStorage.setItem(storageKey, JSON.stringify(bookedMovies));
       
       // Trigger event so Booking page updates
       window.dispatchEvent(new Event('bookingUpdated'));

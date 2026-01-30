@@ -10,10 +10,12 @@ export default function User(){
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
-    setUserEmail(getUserEmail());
+    const email = getUserEmail();
+    setUserEmail(email);
     
     const loadBookings = () => {
-      const stored = localStorage.getItem('bookedMovies');
+      const storageKey = `bookedMovies_${email}`;
+      const stored = localStorage.getItem(storageKey);
       if (stored) {
         try {
           setBookedMovies(JSON.parse(stored));
