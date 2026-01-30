@@ -1,10 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Booking() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('All');
+  const [bookedMovies, setBookedMovies] = useState([]);
+
+  // Load booked movies from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('bookedMovies');
+    if (stored) {
+      try {
+        setBookedMovies(JSON.parse(stored));
+      } catch (e) {
+        console.error('Error loading booked movies:', e);
+      }
+    }
+  }, []);
 
   const movies = [
     {
@@ -427,13 +440,71 @@ export default function Booking() {
         movieId: movie.id,
         price: movie.price,
         showtime,
-        seats: 1
+        seats: 1,
+        onBookingComplete: (bookingData) => {
+          const newBooking = {
+            id: Date.now(),
+            movie: movie.title,
+            movieId: movie.id,
+            showtime: showtime,
+            seats: bookingData.seats,
+            totalPrice: bookingData.totalPrice,
+            bookedAt: new Date().toLocaleString()
+          };
+          const updated = [...bookedMovies, newBooking];
+          setBookedMovies(updated);
+          localStorage.setItem('bookedMovies', JSON.stringify(updated));
+        }
       } 
     });
   }
 
   return (
-    <div>
+    <div className="booking-page fade-in">
+      {/* Orders Section */}
+      {bookedMovies.length > 0 && (
+        <div className="orders-section">
+          <h2 style={{marginBottom: 20}}>📋 Your Bookings</h2>
+          <div className="orders-grid">
+            {bookedMovies.map((booking, index) => (
+              <div key={booking.id} className="order-card slide-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="order-header">
+                  <div className="order-status">✓ Confirmed</div>
+                  <div className="order-id">#{booking.id.toString().slice(-6)}</div>
+                </div>
+                
+                <div className="order-details">
+                  <div className="order-item">
+                    <span className="order-label">🎬 Movie</span>
+                    <span className="order-value">{booking.movie}</span>
+                  </div>
+                  
+                  <div className="order-item">
+                    <span className="order-label">🕐 Showtime</span>
+                    <span className="order-value">{booking.showtime}</span>
+                  </div>
+                  
+                  <div className="order-item">
+                    <span className="order-label">🎫 Seats</span>
+                    <span className="order-value">{booking.seats}</span>
+                  </div>
+                  
+                  <div className="order-item">
+                    <span className="order-label">💰 Total Price</span>
+                    <span className="order-value order-price">₹{booking.totalPrice}</span>
+                  </div>
+                </div>
+                
+                <div className="order-footer">
+                  <small>{booking.bookedAt}</small>
+                </div>
+              </div>
+            ))}
+          </div>
+          <hr style={{borderColor: 'rgba(255,255,255,0.1)', margin: '40px 0'}} />
+        </div>
+      )}
+
       <h2 style={{marginBottom: 20}}>Select Your Movie</h2>
       
       {/* Search and Filter */}

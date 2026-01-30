@@ -22,7 +22,7 @@ export default function NavBar() {
 
   return (
     <header className="header">
-      <div className="logo">Movie Booker</div>
+      <div className="logo">MovieFlix</div>
       <nav className="nav">
         <Link to="/">Home</Link>
         <Link to="/booking">Booking</Link>

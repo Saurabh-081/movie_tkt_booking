@@ -944,4 +944,126 @@ body{
   }
 }
 
+/* ===== BOOKING PAGE - ORDERS SECTION ===== */
+.booking-page {
+  animation: fade-in 0.6s ease-out;
+}
 
+.orders-section {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 143, 107, 0.05));
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.orders-section h2 {
+  color: #fff;
+  font-size: 1.8em;
+  margin: 0 0 20px 0;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.order-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  animation: slide-in 0.6s ease-out forwards;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 107, 107, 0.4);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 15px 40px rgba(255, 107, 107, 0.15);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.order-status {
+  background: linear-gradient(90deg, #6bbf6b, #7dd67d);
+  color: #081025;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.order-id {
+  color: var(--muted);
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.95em;
+}
+
+.order-label {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.order-value {
+  color: #fff;
+  font-weight: 600;
+}
+
+.order-price {
+  color: var(--accent);
+  font-size: 1.1em;
+}
+
+.order-footer {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  font-size: 0.8em;
+  text-align: right;
+}
+
+@media (max-width: 700px) {
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .orders-section {
+    padding: 20px;
+  }
+  
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .order-value {
+    margin-top: 4px;
+  }
+}

@@ -7,6 +7,7 @@ export default function Payment() {
   const movie = location.state?.movie ?? 'Selected movie';
   const showtime = location.state?.showtime ?? '2:00 PM';
   const price = location.state?.price ?? 250;
+  const onBookingComplete = location.state?.onBookingComplete;
   const [method, setMethod] = useState('UPI');
   const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -25,7 +26,18 @@ export default function Payment() {
       alert('Please select at least 1 seat');
       return;
     }
-    alert(`Payment of ₹${totalPrice} (${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''} - ${selectedSeats.join(', ')}) via ${method} completed!\n\nBooking Confirmed for ${movie} at ${showtime}`);
+    
+    // Save booking data
+    if (onBookingComplete) {
+      onBookingComplete({
+        seats: selectedSeats.length,
+        seatIds: selectedSeats.join(', '),
+        totalPrice: totalPrice,
+        method: method
+      });
+    }
+    
+    alert(`✓ Payment of ₹${totalPrice} (${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''} - ${selectedSeats.join(', ')}) via ${method} completed!\n\nBooking Confirmed for ${movie} at ${showtime}`);
     navigate('/booking');
   }
 
