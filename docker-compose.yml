@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  auth-service:
+    build: ./auth-service-python
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+
+  booking-service:
+    build: ./booking-service-node
+    ports:
+      - "6000:6000"
+    environment:
+      - PORT=6000
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend-react
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    depends_on:
+      - auth-service
+      - booking-service
