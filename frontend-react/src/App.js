@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -16,7 +17,8 @@ function App() {
 
       <main className="container">
         <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/booking" element={
               <ProtectedRoute>
                 <Booking />
@@ -37,7 +39,7 @@ function App() {
         </Routes>
       </main>
 
-      <footer className="footer">Built with ❤️ — Demo</footer>
+      <footer className="footer">© 2026 Movie Ticket Booking. All rights reserved.</footer>
     </>
   );
 }

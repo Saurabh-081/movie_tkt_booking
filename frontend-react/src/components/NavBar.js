@@ -36,7 +36,7 @@ export default function NavBar() {
             <button className="btn ghost" onClick={handleLogout} style={{border:'none',background:'transparent',color:'#ff6b6b',cursor:'pointer',padding:'4px 8px',borderRadius:4,fontSize:14}}>Logout</button>
           </div>
         ) : (
-          <Link to="/" style={{color:'#ff6b6b',fontWeight:'500'}}>Login</Link>
+          <Link to="/login" style={{color:'#ff6b6b',fontWeight:'500'}}>Login</Link>
         )}
       </nav>
     </header>

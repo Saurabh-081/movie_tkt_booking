@@ -5,6 +5,10 @@ import jwt
 import os
 from datetime import datetime, timedelta
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -152,6 +156,9 @@ def reset():
         logger.error(f"Password reset error: {str(e)}")
         return jsonify({"msg": "Reset failed. Please try again."}), 500
 
+if __name__ == '__main__':
+    # Enable auto-reload for development
+    app.run(host='0.0.0.0', port=5000, debug=True)
 if __name__ == "__main__":
     print("Starting app...")
     app.run(host='0.0.0.0', port=5000, debug=False)

@@ -17,7 +17,7 @@ export default function Login() {
       const data = await loginRequest(email, password);
       if (data && data.access_token){
         saveToken(data.access_token);
-        navigate('/booking');
+        navigate('/');
       }
     }catch(err){
       setError(err.response?.data?.msg || 'Login failed');
@@ -81,6 +81,15 @@ export default function Login() {
           <button className="btn ghost" onClick={() => window.location.href='/forgot'} style={{background:'transparent',border:'none',color:'#0077cc',cursor:'pointer',padding:0,textDecoration:'underline'}}>Forgot password?</button>
         </div>
       )}
+      <div style={{marginTop:16,textAlign:'center'}}>
+        <button 
+          className="btn ghost" 
+          onClick={() => navigate('/')}
+          style={{background:'transparent',border:'none',color:'var(--muted)',cursor:'pointer',padding:0,textDecoration:'underline'}}
+        >
+          ← Back to Home
+        </button>
+      </div>
     </div>
   );
 }
